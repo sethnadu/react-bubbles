@@ -28,6 +28,7 @@ const ColorList = ({ colors, updateColors }) => {
         .catch(error => console.log(error))
 }
 
+
   const saveEdit = e => {
     e.preventDefault()
     axiosWithAuth()
@@ -109,7 +110,7 @@ console.log(updatedColor)
         </form>
       )}
       <div />
-      <FormikAddColor updateColors = {updateColors} colors = {colors}/>
+      <FormikAddColor updateColors = {updateColors} colors = {colors} Run = {Run}/>
     </div>
   );
 };

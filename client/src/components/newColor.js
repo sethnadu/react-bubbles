@@ -39,11 +39,12 @@ const useStyles = makeStyles({
 
 })
 
-const AddColor = ({errors, touched, updateColors, colors, status}) => {
+const AddColor = ({errors, touched, Run, status}) => {
     
     // useEffect(() => {
-    //     updateColors([status])
-    // }, [ status])
+    //     Run()
+
+    // }, [status])
 
 
     const classes = useStyles();
@@ -52,9 +53,9 @@ const AddColor = ({errors, touched, updateColors, colors, status}) => {
       <Form className = {classes.Form}>
         <h2>Add Color</h2>
         <Field className = {classes.inputText} type = "text" name = "color" placeholder ="Color" />
-        {touched.code && errors.code && <p>{errors.code}</p>}
-        <Field className = {classes.inputText} type = "text" name = "code" placeholder = "Code" />
         {touched.color && errors.color && <p>{errors.color}</p>}
+        <Field className = {classes.inputText} type = "text" name = "code" placeholder = "Code" />
+       {touched.code && errors.code && <p>{errors.code}</p>}
         <button className = {classes.button} type="submit">Submit</button>
         </Form>
     </div>
@@ -72,7 +73,7 @@ const FormikAddColor = withFormik({
 
   validationSchema: Yup.object().shape({
     color: Yup.string().required("Color is Required"),
-    code: Yup.string().required("Code is Required"),
+    code: Yup.string().required("Code (# format) is Required"),
   }),
 
   handleSubmit({color, code, setStatus}) {
