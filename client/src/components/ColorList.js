@@ -8,16 +8,25 @@ const initialColor = {
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors, history }) => {
+const ColorList = ({ colors, updateColors }) => {
 
-  console.log(history);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-
+  const [updatedColor, setUpdatedColor] = useState([])
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
+
+  useEffect(() => {
+    axiosWithAuth()
+        .get("http://localhost:5000/api/colors")
+        .then(res => {
+            console.log("get", res.data)
+            setUpdatedColor(res.data)
+        })
+        .catch(error => console.log(error))
+}, [setUpdatedColor])
 
 
 console.log(colors)
@@ -27,20 +36,20 @@ console.log(colors)
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
         console.log("edit", res.data)
-        history.push("/colors")
-        updateColors([...colors])
+        updateColors([...updatedColor])
       })
       .catch(error => console.log(error))
   }
  
   const deleteColor = color => {
     console.log(colors)
+    
     axiosWithAuth()
       .delete(`http://localhost:5000/api/colors/${color.id}`)
       .then(res => {
         console.log("delete", res.data)
-        // history.push("/protected")
-        // updateColors(res.data)
+        updateColors([...updatedColor])
+        
         })
       .catch(error => console.log(error))
   };
