@@ -18,18 +18,11 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToEdit(color);
   };
 
-//   useEffect(() => {
-//     axiosWithAuth()
-//         .get("http://localhost:5000/api/colors")
-//         .then(res => {
-//             console.log("get", res.data)
-//             setUpdatedColor(res.data)
-//         })
-//         .catch(error => console.log(error))
-// }, [setUpdatedColor])
 
 
-console.log(colors)
+
+
+
   const saveEdit = e => {
     e.preventDefault()
     axiosWithAuth()
@@ -40,9 +33,9 @@ console.log(colors)
       })
       .catch(error => console.log(error))
   }
- 
+
+console.log(colors)
   const deleteColor = color => {
-    console.log(colors)
     
     axiosWithAuth()
       .delete(`http://localhost:5000/api/colors/${color.id}`)
@@ -53,6 +46,19 @@ console.log(colors)
         })
       .catch(error => console.log(error))
   };
+
+
+//   console.log(colors)
+//   useEffect(() => {
+//     axiosWithAuth()
+//         .get("http://localhost:5000/api/colors")
+//         .then(res => {
+//             console.log("get", res.data)
+//             setUpdatedColor(res.data)
+//         })
+//         .catch(error => console.log(error))
+// }, [setUpdatedColor])
+
 
   return (
     <div className="colors-wrap">
