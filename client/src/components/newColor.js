@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Form, Field, withFormik} from "formik";
 import { makeStyles } from '@material-ui/core/styles';
 import * as Yup from 'yup';
@@ -39,7 +39,13 @@ const useStyles = makeStyles({
 
 })
 
-const AddColor = ({errors, touched}) => {
+const AddColor = ({errors, touched, updateColors, colors, status}) => {
+    
+    // useEffect(() => {
+    //     updateColors([status])
+    // }, [ status])
+
+
     const classes = useStyles();
   return (
     <div className = {classes.Container}>
@@ -69,13 +75,13 @@ const FormikAddColor = withFormik({
     code: Yup.string().required("Code is Required"),
   }),
 
-  handleSubmit({color, code}) {
+  handleSubmit({color, code, setStatus}) {
 
       const values = {color: color, code: {hex: code}}
       axiosWithAuth()
           .post("http://localhost:5000/api/colors", values)
           .then(res => {
-              console.log(res.data)
+              setStatus(res.data)
           })
           .catch(error => console.log(error))
       

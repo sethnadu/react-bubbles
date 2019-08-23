@@ -12,31 +12,31 @@ const ColorList = ({ colors, updateColors }) => {
 
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-  const [updatedColor, setUpdatedColor] = useState([])
+  // const [updatedColor, setUpdatedColor] = useState([])
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
 
-  useEffect(() => {
-    axiosWithAuth()
-        .get("http://localhost:5000/api/colors")
-        .then(res => {
-            console.log("get", res.data)
-            setUpdatedColor(res.data)
-        })
-        .catch(error => console.log(error))
-}, [setUpdatedColor])
+//   useEffect(() => {
+//     axiosWithAuth()
+//         .get("http://localhost:5000/api/colors")
+//         .then(res => {
+//             console.log("get", res.data)
+//             setUpdatedColor(res.data)
+//         })
+//         .catch(error => console.log(error))
+// }, [setUpdatedColor])
 
 
 console.log(colors)
   const saveEdit = e => {
-    e.preventDefault();
+    e.preventDefault()
     axiosWithAuth()
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
         console.log("edit", res.data)
-        updateColors([...updatedColor])
+        updateColors([...colors])
       })
       .catch(error => console.log(error))
   }
@@ -48,7 +48,7 @@ console.log(colors)
       .delete(`http://localhost:5000/api/colors/${color.id}`)
       .then(res => {
         console.log("delete", res.data)
-        updateColors([...updatedColor])
+        updateColors([...colors])
         
         })
       .catch(error => console.log(error))
@@ -61,9 +61,9 @@ console.log(colors)
         {colors.map(color => (
           <li key={color.color} onClick={() => editColor(color)}>
             <span>
-              <span className="delete" onClick={() => deleteColor(color)}>
+              <button className="delete" onClick={() => deleteColor(color)}>
                 x
-              </span>{" "}
+              </button>{" "}
               {color.color}
             </span>
             <div
@@ -104,7 +104,7 @@ console.log(colors)
         </form>
       )}
       <div />
-      <FormikAddColor />
+      <FormikAddColor updateColors = {updateColors} colors = {colors}/>
     </div>
   );
 };
