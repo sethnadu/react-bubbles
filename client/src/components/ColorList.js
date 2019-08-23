@@ -12,16 +12,21 @@ const ColorList = ({ colors, updateColors }) => {
 
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-  // const [updatedColor, setUpdatedColor] = useState([])
+  const [updatedColor, setUpdatedColor] = useState([])
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
 
-
-
-
-
+  const Run = () => {
+    axiosWithAuth()
+        .get("http://localhost:5000/api/colors")
+        .then(res => {
+            console.log("get", res.data)
+            updateColors(res.data)
+        })
+        .catch(error => console.log(error))
+}
 
   const saveEdit = e => {
     e.preventDefault()
@@ -29,35 +34,29 @@ const ColorList = ({ colors, updateColors }) => {
       .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
       .then(res => {
         console.log("edit", res.data)
-        updateColors([...colors])
+        Run()
+        
       })
       .catch(error => console.log(error))
+   
   }
 
 console.log(colors)
   const deleteColor = color => {
-    
     axiosWithAuth()
       .delete(`http://localhost:5000/api/colors/${color.id}`)
       .then(res => {
         console.log("delete", res.data)
-        updateColors([...colors])
-        
+        Run()
         })
       .catch(error => console.log(error))
+   
   };
 
 
-//   console.log(colors)
-//   useEffect(() => {
-//     axiosWithAuth()
-//         .get("http://localhost:5000/api/colors")
-//         .then(res => {
-//             console.log("get", res.data)
-//             setUpdatedColor(res.data)
-//         })
-//         .catch(error => console.log(error))
-// }, [setUpdatedColor])
+  console.log(colors)
+  
+console.log(updatedColor)
 
 
   return (
