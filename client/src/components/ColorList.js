@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import {axiosWithAuth} from "../Utils/axiosWithAuth";
+import FormikAddColor from "./newColor.js"
+
 
 const initialColor = {
   color: "",
@@ -7,25 +9,56 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
+
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
-
+  const [updatedColor, setUpdatedColor] = useState([])
   const editColor = color => {
     setEditing(true);
     setColorToEdit(color);
   };
 
+  const Run = () => {
+    axiosWithAuth()
+        .get("http://localhost:5000/api/colors")
+        .then(res => {
+            console.log("get", res.data)
+            updateColors(res.data)
+        })
+        .catch(error => console.log(error))
+}
+
+
   const saveEdit = e => {
-    e.preventDefault();
-    // Make a put request to save your updated color
-    // think about where will you get the id from...
-    // where is is saved right now?
+    e.preventDefault()
+    axiosWithAuth()
+      .put(`http://localhost:5000/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then(res => {
+        console.log("edit", res.data)
+        Run()
+        
+      })
+      .catch(error => console.log(error))
+   
+  }
+
+console.log(colors)
+  const deleteColor = color => {
+    axiosWithAuth()
+      .delete(`http://localhost:5000/api/colors/${color.id}`)
+      .then(res => {
+        console.log("delete", res.data)
+        Run()
+        })
+      .catch(error => console.log(error))
+   
   };
 
-  const deleteColor = color => {
-    // make a delete request to delete this color
-  };
+
+  console.log(colors)
+  
+console.log(updatedColor)
+
 
   return (
     <div className="colors-wrap">
@@ -34,9 +67,9 @@ const ColorList = ({ colors, updateColors }) => {
         {colors.map(color => (
           <li key={color.color} onClick={() => editColor(color)}>
             <span>
-              <span className="delete" onClick={() => deleteColor(color)}>
+              <button className="delete" onClick={() => deleteColor(color)}>
                 x
-              </span>{" "}
+              </button>{" "}
               {color.color}
             </span>
             <div
@@ -76,8 +109,8 @@ const ColorList = ({ colors, updateColors }) => {
           </div>
         </form>
       )}
-      <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+      <div />
+      <FormikAddColor updateColors = {updateColors} colors = {colors} Run = {Run}/>
     </div>
   );
 };
